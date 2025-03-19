@@ -1,0 +1,61 @@
+
+
+
+/* 
+.table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table td,
+  .table th {
+    padding: 4px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .table th {
+    color: #ffffff;
+  }
+  @media (max-width: 500px) {
+    .table thead {
+      display: none;
+    }
+  
+    .table,
+    .table tbody,
+    .table tr,
+    .table td {
+      display: block;
+      width: 100%;
+    }
+    .table tr {
+      margin-bottom: 15px;
+    }
+    .table td {
+      padding-left: 50%;
+      text-align: left;
+      position: relative;
+    }
+    .table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      width: 50%;
+      padding-left: 15px;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: left;
+    }
+  }
+   */
+
+
+   .rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'], [data-state='indeterminate'])::before {
+    background-color: #82181a;
+}
+
+.rt-BaseRadioRoot:where(.rt-variant-surface):where(:checked, [data-state='checked'])::before {
+  background-color:#82181a;
+}

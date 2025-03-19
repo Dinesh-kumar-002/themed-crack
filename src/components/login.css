@@ -1,0 +1,118 @@
+/* 
+.TabsRoot {
+	display: flex;
+	flex-direction: column;
+}
+
+.TabsList {
+	flex-shrink: 0;
+	display: flex;
+	border-bottom: 1px solid var(--mauve-6);
+}
+
+.TabsTrigger {
+    padding: 0 20px;
+    height: 45px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    color: var(--mauve-11);
+    user-select: none;
+}
+.TabsTrigger:hover {
+	color: var(--violet-11);
+}
+.TabsTrigger[data-state="active"] {
+	color: var(--violet-11);
+}
+.TabsTrigger:focus {
+	position: relative;
+	box-shadow: 0 0 0 2px black;
+}
+
+.TabsContent {
+	flex-grow: 1;
+	padding: 20px;
+	outline: none;
+}
+.TabsContent:focus {
+	box-shadow: 0 0 0 2px black;
+}
+
+.Text {
+	margin-top: 0;
+	margin-bottom: 20px;
+	color: var(--mauve-11);
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.Fieldset {
+	margin-bottom: 15px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.Label {
+	font-size: 13px;
+	line-height: 1;
+	margin-bottom: 10px;
+	color: var(--violet-12);
+	display: block;
+	user-select: none;
+}
+
+.Input {
+	flex: 1 0 auto;
+	border-radius: 0px;
+	padding: 0 10px;
+	line-height: 1;
+	height: 35px;
+	
+}
+input{
+	border: 1px solid gray;
+	border-radius: 0;
+	
+}
+textarea{
+	padding: 5px;
+	border-radius: 0;
+    height: 55px;
+    width: 100%;
+	border: 1px solid gray;
+    
+}
+.Button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	padding: 0 15px;
+	font-size: 15px;
+	line-height: 1;
+	font-weight: 500;
+	height: 35px;
+}
+.Button.green {
+	background-color: var(--green-4);
+	color: var(--green-11);
+}
+.Button.green:hover {
+	background-color: var(--green-5);
+}
+.Button.green:focus {
+	box-shadow: 0 0 0 2px var(--green-7);
+}
+
+
+span.error {
+    color: rgb(255, 70, 70);
+    font-weight: 600;
+	margin-bottom: 6px;
+	display: inline-block;
+} */

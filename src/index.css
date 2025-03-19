@@ -1,0 +1,114 @@
+@import "tailwindcss";
+/* @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+body{
+    font-family: "Poppins", sans-serif !important;
+} */
+
+
+.strike{
+    position: relative;
+    opacity: 0.7;
+}
+
+.real.price{
+    margin-left: 10px;
+    /* COLOR: aliceblue; */
+}
+
+.strike::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    rotate: -10deg;
+}
+.individual-price{
+        font-weight: 600;
+        border-right: 0;
+        border-top: 0;
+}
+
+.list-view .product-card{
+    display: flex;
+
+}
+
+.list-view .product-card .control{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+.grid-view .product-card .control{
+    justify-content: center;
+}
+.product-card {
+    position: relative;
+}
+
+.list-view .sub-total {
+    position: absolute;
+    right: 0px;
+    top: 3px;
+    padding: 3px 6px;
+    background-color: #0d542b;
+    border: 0;
+    font-size: 13px;
+}
+.grid-view .sub-total{
+    display: none;
+}
+
+@media only screen and (max-width:768px){
+    .filter-box {
+        position: fixed;
+        width: 100%;
+        z-index: 2;
+        top: 187px;
+        background-color: #fefce8;
+    }
+}
+
+
+.Label {
+	color: white;
+	font-size: 15px;
+	line-height: 1;
+	user-select: none;
+}
+
+.qnt-show {
+    top: -17px;
+    right: -21px;
+    background: #1db44e;
+    display: flex;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    padding: 1px 7px;
+    aspect-ratio: 1;
+    font-size: 13px;
+    color: white;
+    font-weight: 800;
+}
+
+
+ select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  select {
+    position: relative;
+  }
+
+  .is-next, .is-prev {
+    display: none !important;
+  }
