@@ -136,11 +136,27 @@ const initFancyboxAndCarousel = () => {
     
     if(loginStatus){
       // checkout();
+      if(cart.length>0){
+        
+        if(totalPrice>=3000){
+          signUpStatusToggle();
+          cartStatusToggle();
+          
+        }
+        else{
+
+          toast.warning(`Minimum order ₹ 3000 😥`,{position: "bottom-center",
+                                    autoClose: 1000});
+        }
+        
+      }
+      else{
+        toast.warning(`Please Put Something in your bag 😥`,{position: "bottom-center",
+                                  autoClose: 1000});
+      }
       if(profileStatus){
         toggleProfileStatus(false);
       }
-      signUpStatusToggle();
-      cartStatusToggle();
 
     }
     else{
@@ -152,8 +168,8 @@ const initFancyboxAndCarousel = () => {
     <div className="fixed right-0 w-100 h-full bg-yellow-50 z-1 shadow-lg" style={{paddingBottom:"100px",display:cartStatus?"block":"none",boxShadow: "black -5px 5px 45px -15px"}}>
 
       <div className="flex justify-between py-5 px-5" style={{width:"100%"}}>
-        <button className=" cursor-pointer text-black" onClick={()=>{cartStatusToggle()}}><GrLinkPrevious/></button>
-        <h1  className="font-bold">Cart</h1>
+        <button className=" cursor-pointer text-black text-[20px]" onClick={()=>{cartStatusToggle()}}><GrLinkPrevious/></button>
+        <h1  className="font-bold text-[20px]">Cart</h1>
       </div>
       <div style={{position:"sticky",top:"0px",overflowY:"scroll",height:"80vh",paddingBottom:'50px'}} className="px-2 pt-0">
       {(cartItems.length === 0) && 
@@ -240,8 +256,8 @@ const initFancyboxAndCarousel = () => {
         <div className="fixed bottom-0 w-100">
               <p className="text-center bg-white text-black py-1">You saved <span className="text-[13px] text-red-700">₹{totalPriceDiscount}/-</span></p>
               <div className="flex justify-between">
-              <button className="bg-[#0090ff] text-white-900  font-bold w-50 border-r-2 text-[18px]" onClick={handlePlaceOrder}>Place order</button>
-              <p className="bg-green-600 text-white-900 font-bold w-50 text-center" style={{lineHeight:"35px"}}>Total <span>₹{totalPrice}/-</span></p>
+              <button className="bg-green-700 text-white font-bold w-50 border-r-2 text-[18px] p-2" onClick={handlePlaceOrder}>Place order</button>
+              <p className="bg-red-800 text-white font-bold w-50 text-center p-2" style={{lineHeight:"35px"}}>Total <span>₹{totalPrice}/-</span></p>
 
           </div>
         </div>

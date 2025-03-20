@@ -112,3 +112,27 @@ body{
   .is-next, .is-prev {
     display: none !important;
   }
+
+  .order{
+    position: relative;
+  }
+  .order::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 30px;
+    bottom: -29px;
+    background-repeat: no-repeat;
+    left: 0;
+    background-image: url(/src/assets/zig-bottom.png);
+}
+/* .order::before{
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 50px;
+    top: 0;
+    left: 0;
+    background-image: url(./assets/zig-top.png);
+
+  } */

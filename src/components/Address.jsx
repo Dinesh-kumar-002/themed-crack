@@ -12,8 +12,8 @@ function Address() {
   const { loginUserEmail } = userLoginStatus();
   const { addressStatus, toggleAddressStatus } = address();
   const [userAddress, setUserAddress] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
 
   const {
@@ -81,6 +81,7 @@ function Address() {
     <>
       <div className="flex justify-between mb-2">
         <button
+        className="text-[20px] font-bold"
           onClick={() => {
             toggleAddressStatus(false);
             toggleProfileStatus(false);
@@ -88,7 +89,7 @@ function Address() {
         >
           <GrLinkPrevious />
         </button>
-        <h1 className="text-[20px] mb-5">My Address</h1>
+        <h1 className="text-[20px] mb-5 font-bold">My Address</h1>
       </div>
 
       {loading ? (
@@ -99,87 +100,75 @@ function Address() {
         userAddress &&
         Object.values(userAddress).some((value) => value) ? (
         <div id="storeaddress" className="bg-red-50 p-4">
-          {/* <div className="p-4 border border-gray-300 rounded-lg bg-white">
-                        <h2 className="text-lg font-semibold text-gray-700 mb-3">Saved Address</h2>
-                        <p className="text-gray-600"><strong>Name:</strong> {userAddress?.name}</p>
-                        <p className="text-gray-600"><strong>Phone:</strong> {userAddress?.phone}</p>
-                        <p className="text-gray-600"><strong>Alternate Phone:</strong> {userAddress?.altphone}</p>
-                        <p className="text-gray-600"><strong>Address:</strong> {userAddress?.address}</p>
-                        <p className="text-gray-600"><strong>Pincode:</strong> {userAddress?.pincode}</p>
-                        <p className="text-gray-600"><strong>State:</strong> {userAddress?.state}</p>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4" onClick={() => setIsEditing(true)}>
-                            Edit Address
-                        </button>
-                    </div> */}
-
-          <div class="relative">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-              <thead class="text-xs text-gray-700 uppercase bg-red-200">
+         
+          <div className="relative">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+              <thead className="text-xs text-gray-700 uppercase bg-red-200">
                 <tr>
-                  <th scope="col" class="px-6 py-3">
+                  <th scope="col" className="px-6 py-3">
                     Title
                   </th>
-                  <th scope="col" class="px-6 py-3">
+                  <th scope="col" className="px-6 py-3">
                     Details
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="bg-white border-b border-gray-200">
+                <tr className="bg-white border-b border-gray-200">
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     Name
                   </th>
-                  <td class="px-6 py-4">{userAddress?.name}</td>
+                  <td className="px-6 py-4">{userAddress?.name}</td>
                 </tr>
-                <tr class="bg-white border-b border-gray-200">
+                <tr className="bg-white border-b border-gray-200">
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     Phone
                   </th>
-                  <td class="px-6 py-4">{userAddress?.phone}</td>
+                  <td className="px-6 py-4">{userAddress?.phone}</td>
                 </tr>
-                <tr class="bg-white border-b border-gray-200">
+                <tr className="bg-white border-b border-gray-200">
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     Alternate Phone
                   </th>
-                  <td class="px-6 py-4">
+                  <td className="px-6 py-4">
                     {(userAddress && !userAddress.altphone=="") ? userAddress.altphone : "---"}
                   </td>
                 </tr>
-                <tr class="bg-white border-b border-gray-200">
+                <tr className="bg-white border-b border-gray-200">
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     Address
                   </th>
-                  <td class="px-6 py-4">{userAddress?.address}</td>
+                  <td className="px-6 py-4">{userAddress?.address}</td>
                 </tr>
-                <tr class="bg-white border-b border-gray-200">
+                <tr className="bg-white border-b border-gray-200">
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     Pincode
                   </th>
-                  <td class="px-6 py-4">{userAddress?.pincode}</td>
+                  <td className="px-6 py-4">{userAddress?.pincode}</td>
                 </tr>
-                <tr class="bg-white border-b border-gray-200">
+                <tr className="bg-white border-b border-gray-200">
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     State
                   </th>
-                  <td class="px-6 py-4">{userAddress?.state}</td>
+                  <td className="px-6 py-4">{userAddress?.state}</td>
                 </tr>
               </tbody>
             </table>

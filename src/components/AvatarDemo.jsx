@@ -14,8 +14,8 @@ return(
 	<div>
 		
 		<Avatar.Root className="inline-flex size-[35px] select-none items-center justify-center overflow-hidden rounded-full align-middle me-4 bg-white shadow-sm cursor-pointer">
-			<Avatar.Fallback className="leading-1 flex size-full text-slate-700 items-center justify-center text-[16px] font-medium">
-			{ loginStatus?loginUserEmail.slice(0,2):<IoPerson />}	
+			<Avatar.Fallback className="leading-1 flex size-full text-slate-700 items-center justify-center text-[15px] font-bold">
+			{ loginStatus?loginUserEmail.slice(0,2).toUpperCase():<IoPerson />}	
 			</Avatar.Fallback>
 		</Avatar.Root>
 	

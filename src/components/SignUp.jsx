@@ -1,153 +1,284 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Spinner,
-} from "@radix-ui/themes";
-import { GiCheckMark } from "react-icons/gi";
 import { useForm } from "react-hook-form";
 import { GrLinkPrevious } from "react-icons/gr";
-import OtpInput from "react-otp-input";
-import { Tabs } from "radix-ui";
 import "./signup.css";
 import signUpToggle from "../store/signUpToggle";
-import loginOffcanvas from "../store/loginOffcanvas";
-import cartToggle from "../store/cartToggle";
+import cartStore from "../store/cartStore";
 import userLoginStatus from "../store/userLoginStatus";
-import Cookies from "universal-cookie";
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
+
+const MySwal = withReactContent(Swal)
 
 function SignUp() {
-  const {loginStatus,setLogin,setLoginStatus,refreshLoginStatus}= userLoginStatus();
-  const {signUpStatus, signUpStatusToggle } = signUpToggle();
-  const {cartStatus,cartStatusToggle}= cartToggle();
-  const {loginOffcanvasStatus,loginOffcanvasStatusToggle}= loginOffcanvas();
-  const [otp, setOtp] = useState("");
-  const [emailVerified,setEmailVerified] = useState(false);
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [otpError, setOtpError] = useState("");
-  const [verifyButtonContent,setVerifyButtonContent]=useState("verify");
-  const [emailSet, setEmailSet] = useState(false);
-  const [otpHide, setOtpHide] = useState(true);
-  const [otpSent, setOtpSent] = useState(false);
-  
+  const { loginUserEmail } = userLoginStatus();
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
+  const { cart,clearCart } = cartStore();
+  const { signUpStatus, signUpStatusToggle } = signUpToggle();
+  const [userAddress, setUserAddress] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
+  const [orderPlaced,setOrderPlaced] = useState(false);
 
-
-
-
-  
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
 
+  useEffect(() => {
+    getUserAddress();
+  }, []);
 
-  
-  const onSubmit = async (data) =>{
-    // if(emailVerified){
+  useEffect(() => {
+    if (userAddress) {
+      setValue("name", userAddress.name || "");
+      setValue("phone", userAddress.phone || "");
+      setValue("altphone", userAddress.altphone || "");
+      setValue("address", userAddress.address || "");
+      setValue("pincode", userAddress.pincode || "");
+      setValue("state", userAddress.state || "Tamil Nadu");
+    }
+  }, [userAddress, setValue]);
+
+  const getUserAddress = async () => {
+    
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(
+        "https://admin.vmpscrackers.com/api/getuser",
+        { email: loginUserEmail }
+      );
+      if (response.data && response.data.data) {
+        setUserAddress(response.data.data);
+        setIsEditing(false);
+      } else {
+        setIsEditing(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user address:", error);
+      setError("Failed to fetch address. Please try again.");
+      setIsEditing(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    
+      console.log(data);
       
-      await axios.post("https://admin.vmpscrackers.com/api/place-order",{cart,email:loginUserEmail,data})
-      .then(response=>{
-       console.log(response);
+    await axios
+      .post("https://myhitech.digitalmantraaz.com/api/place-order", {
+        cart,
+        email: loginUserEmail,
+        data,
+      })
+      .then((response) => {
+        if(response.data.status=="success"){
+          signUpStatusToggle();
+          setOrderPlaced(true);
+          clearCart();
+          Swal.fire({
+            title: "Order Placed Successfully",
+            width: 600,
+            icon: "success",
+            padding: "2em",
+            color: "green",
+            background: "#fff url(/images/trees.png)",
+            backdrop: `
+              rgba(0, 157, 57, 0.4)
+              url("/images/nyan-cat.gif")
+              left top
+              no-repeat
+            `
+          });
+        }
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-      // if(response.data.status=="success"){
-      //   toast.success("Registered Successfully",{position: "bottom-center",autoClose: 2500});
-      //   const loginCookie = new Cookies(null, { path: "/" });
-      //     const userCookieEmail = data.email;
-          
-      //     if (loginCookie.get("userCookieEmail")) {
-      //       return;
-      //     } else {
-      //       loginCookie.set("userCookieEmail", userCookieEmail);
-      //     }
-      //   setLogin(data.email);
-      //   setLoginStatus();
-      //   refreshLoginStatus();
-      //     reset();
-      //     signUpStatusToggle();
-      //     cartStatusToggle();
-      // }
 
-     })
-     .catch(error=>{
-       console.error(error);
-     })
-    // }else{
-    //   setEmailError("Please Verify your mail");
-    // }
-  }
-
-
+  const handleCheckboxChange = (e) => {
+      setIsChecked(e.target.checked);
+    console.log("Checkbox checked:", e.target.checked);
+  };
   return (
+    <form onSubmit={handleSubmit(onSubmit)}>
     <div
-      className="p-5 fixed top-16 w-100 right-0 h-full bg-black z-9"
+      className="p-5 fixed top-16 w-100 right-0 h-full bg-red-50 z-9"
       style={{ display: signUpStatus ? "block" : "none" }}
     >
       <div className="flex justify-between mb-2">
-        <button onClick={signUpStatusToggle}>
+        <button onClick={signUpStatusToggle} type="button" className="font-bold text-[20px]">
           <GrLinkPrevious />
         </button>
-        <h1 className="text-[20px] mb-5">Shipping Address</h1>
+        <h1 className="text-[20px] mb-5 font-bold">Shipping Address</h1>
       </div>
 
-      {/* <h1 className="text-[22px] mb-5">Contact Details</h1> */}
-<form action="" onSubmit={handleSubmit(onSubmit)}>
-        {/* <label htmlFor="name" className="pb-2 block">
-        Name
-        </label> */}
-        <input placeholder="Name" id="name" {...register("name",{ required: true })} />
-        {errors.name && <span className="error">Name is manditory</span>}
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            {/* <label htmlFor="phone1" className="pb-2 block">
-              Phone Number
-            </label> */}
-            <input placeholder="Phone Number *" id="phone1" {...register("phone",{ required: true ,pattern:"/^\d{0,10}$/"})} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : !isEditing &&
+        userAddress &&
+        Object.values(userAddress).some((value) => value) ? (
+        <div id="storeaddress" className="bg-red-50 p-2">
+          <div className="relative">
+            <div className="p-3 bg-white"  onClick={()=>{isChecked?setIsChecked(false):setIsChecked(true)}}>
+              <input id="remember" type="checkbox" {...register("checkedAddress", { required: "* Please select Shipping Address" })} checked={isChecked} onChange={handleCheckboxChange} class="w-6 h-6 border border-gray-300 rounded-sm bg-green-50 focus:ring-3 focus:ring-green-300 float-end" />
+              
+                <p className="font-bold text-[18px]">To ,</p>
+                <br />
+                <p className="py-1">{userAddress.name}</p>
+                <p className="py-1">
+                  <span>{userAddress.phone}</span>&nbsp;,&nbsp;
+                  <span>{userAddress.altphone}</span>
+                </p>
+                <p className="py-1">{userAddress.address}</p>
+                <p className="py-1">{userAddress.pincode}</p>
+                <p className="py-1">{userAddress.state}</p>
           </div>
-          <div>
-            {/* <label htmlFor="phone2" className="pb-2 block">
-              Alternate No
-            </label> */}
-            <input placeholder="Alternate Number" id="phone2" {...register("altphone")} />
+          {errors.checkedAddress && !isChecked && (
+              <span className="error text-red-600 block mt-2 font-bold">
+                {errors.checkedAddress.message}
+              </span>
+            )}
+
+            
+                <div className="flex" style={{justifyContent:(isChecked)?"end":"space-between"}}>
+                  {!isChecked?
+                    <button
+                    className="bg-blue-500 text-white p-2 px-4 mt-4"
+                    onClick={() => setIsEditing(true)}
+                    >
+                    Edit Billing Address
+                  </button>:null
+                  }
+                  
+                    <button
+                      className="bg-green-500 text-white p-3 px-4  mt-4"
+                      type="submit" style={{width:(isChecked)?"100%":""}}
+                    >
+                      Confirm Order
+                    </button>
+                  
+                </div>
           </div>
         </div>
-        {errors.phone && <span className="error">* Phone Number is manditory</span>}
-
-      <textarea id="address" placeholder="Delivery Address" {...register("address", { required: "Address is Manditory" })}></textarea>
-      {errors.address && <span className="error">Address is required</span>}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          {/* <label htmlFor="pincode" className="pb-2 block">
-            Pincode
-          </label> */}
-          <input id="pincode" type="number" placeholder="Delivery Pincode" {...register("pincode",{ required: true })} />
-          {errors.pincode && <span className="error">Pincode is required</span>}
-        </div>
-        <div>
-          {/* <label htmlFor="country" className="pb-2 block">
-            State
-          </label> */}
-          <input id="State" type="text" placeholder="Delivery State" value="Tamil Nadu" {...register("state",{ required: true })} />
-          {errors.State && <span className="error">State is required</span>}
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          marginTop: 20,
-          justifyContent: "center",
-        }}
-      >
+      ) : (
        
-        <button className="bg-green-600 px-3 py-2 green" style={{borderRadius:"none"}} type="submit">Confirm Order</button>
-      </div>
-      </form>
+       
+          <div className="">
+            <div className="grid grid-cols-1 gap-1">
+              <input
+                placeholder="Name"
+                className="block border-1 border-gray-300 bg-white  w-full mt-3 p-2"
+                {...register("name", { required: "Name is required" })}
+              />
+              {errors.name && (
+                <span className="error text-red-600">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
+            <div className="grid grid-cols-1 gap-1">
+              <input
+                placeholder="Phone Number *"
+                type="number"
+                className="block border-1 border-gray-300 bg-white  w-full mt-1 p-2"
+                {...register("phone", {
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^\d{10}$/,
+                    message: "Invalid phone number",
+                  },
+                })}
+              />
+              {errors.phone && (
+                <span className="error text-red-600">
+                  {errors.phone.message}
+                </span>
+              )}
+              {/* <input placeholder="Alternate Number"  className="block border-1 border-gray-300 bg-white  w-full mt-1 p-2" {...register("altphone")} /> */}
+            </div>
+            <div className="grid grid-cols-1 gap-1">
+              <input
+                placeholder="Alternate Number"
+                type="number"
+                className="block border-1 border-gray-300 bg-white  w-full mt-1 p-2"
+                {...register("altphone")}
+              />
+            </div>
+            <div className="grid grid-cols-1 gap-1">
+              <textarea
+                placeholder="Delivery Address"
+                className="block border-1 border-gray-300 bg-white  w-full mt-1 p-2"
+                {...register("address", { required: "Address is required" })}
+              ></textarea>
+              {errors.address && (
+                <span className="error text-red-600">
+                  {errors.address.message}
+                </span>
+              )}
+            </div>
+            <div className="grid grid-cols-1 gap-1">
+              <input
+                type="number"
+                className="block border-1 border-gray-300 bg-white  w-full mt-1 p-2"
+                placeholder="Delivery Pincode"
+                {...register("pincode", { required: "Pincode is required" })}
+              />
+               {errors.pincode && (
+                <span className="error text-red-600">
+                  {errors.pincode.message}
+                </span>
+              )}
+              <input
+                type="text"
+                className="block border-1 border-gray-300 bg-white  w-full mt-1 p-2"
+                placeholder="Delivery State"
+                {...register("state", { required: "State is required" })}
+              />
+
+             
+              {errors.state && (
+                <span className="error text-red-600">
+                  {errors.state.message}
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 gap-1">
+              <div className="flex justify-between mt-4">
+                <button
+                  className="bg-gray-500 text-white px-3 py-2 ml-4"
+                  onClick={() => setIsEditing(false)}
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-green-600 text-white px-3 py-2"
+                  type="submit"
+                >
+                  Confirm Order
+                </button>
+              </div>
+            </div>
+          </div>    
+      )}
     </div>
+      </form>
   );
 }
 

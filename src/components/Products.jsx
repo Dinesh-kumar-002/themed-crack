@@ -336,10 +336,12 @@ useEffect(() => {
 </div>
 
       
-      <div className='flex md:hidden fixed bottom-0 z-8 w-full justify-between items-center p-3 bg-gradient-to-r from-red-900 to-red-800' >
-              <button className="focus:outline-none bg-green-700 hover:bg-red-800 font-medium rounded-sm text-sm px-5 py-2.5 me-2 mb-2 font-semibold text-white" onClick={()=>cartStatusToggle()}> View Cart</button>
-              <p className="real price" style={{color:"#fff"}} size="1">you saved ₹{totalPriceDiscount}/-</p>
-              <p className="real price" style={{color:"#fff"}} size="2">₹{totalPrice}/-</p>
+      <div className='md:hidden fixed bottom-0 z-8 w-full pt-3 bg-gradient-to-r from-red-900 to-red-800' >
+             <div className="flex justify-between items-center pb-2">
+             <p className="real price" style={{color:"#fff"}}>you saved <span className="font-bold text-green-400">₹ -{totalPriceDiscount}/-</span></p>
+             <p className="real price" style={{color:"#fff"}}>Total <span className="font-bold text-green-400 text-[20px]">₹ {totalPrice}/-</span>  </p>
+             </div>
+            <button className="focus:outline-none bg-green-700 font-[19px] p-3 px-5 me-2 font-bold text-white w-full" onClick={()=>cartStatusToggle()}> View Cart</button>
             </div>
     </div>
     
