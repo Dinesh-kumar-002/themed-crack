@@ -54,8 +54,21 @@
 
    .rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'], [data-state='indeterminate'])::before {
     background-color: #82181a;
-}
+      }
 
-.rt-BaseRadioRoot:where(.rt-variant-surface):where(:checked, [data-state='checked'])::before {
-  background-color:#82181a;
-}
+      .rt-BaseRadioRoot:where(.rt-variant-surface):where(:checked, [data-state='checked'])::before {
+        background-color:#82181a;
+      }
+
+
+      .marquee {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap; /* Prevents text from wrapping */
+        animation: marquee 15s linear infinite; /* Adjust duration and speed as needed */
+      }
+  
+      @keyframes marquee {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+      }

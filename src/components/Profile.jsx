@@ -18,7 +18,7 @@ function Profile() {
   return (
     <div>
       <div
-        className="p-5 fixed top-16 right-0 h-full w-100 z-9 bg-red-50"
+        className="p-5 fixed top-16 right-0 h-full w-100 z-9 bg-red-50 overflow-y-scroll pb-5"
         style={{ display: profileStatus ? "block" : "none" }}
       >
      

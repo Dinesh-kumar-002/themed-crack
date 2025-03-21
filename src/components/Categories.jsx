@@ -28,7 +28,7 @@ function Categories({setValue,selectCategory,searchValue}) {
 
   return (
     <>
-     <div className="search" width="100%" style={{position:"sticky",top:"75px",zIndex:"2",background:"#0090ff"}}>
+     <div className="search" width="100%" style={{position:"sticky",top:"100px",zIndex:"2",background:"#0090ff"}}>
       <input type="text" value={searchValue} onChange={(e)=>setValue(e.target.value)} placeholder="Search the product…"/>
                 {/* <TextField.Root placeholder="Search the docs…" size="2" value={searchValue} onChange={(e)=>setValue(e.target.value)}>
                     <TextField.Slot>

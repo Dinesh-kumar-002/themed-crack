@@ -15,9 +15,11 @@ import '@fancyapps/ui/dist/carousel/carousel.css';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 import '@fancyapps/ui/dist/carousel/carousel.thumbs.css';
 import { Autoplay } from "@fancyapps/ui/dist/carousel/carousel.autoplay.esm.js";
+import settings from "../store/settings";
 
 function Cart() {
   const { signUpStatus,signUpStatusToggle } = signUpToggle();
+  const {minOrderValue} = settings();
   const {loginOffcanvasStatus,loginOffcanvasStatusToggle}=loginOffcanvas();
   const { categories, fetchCategories } = categoryStore();
   const { cartStatus, cartStatusToggle } = cartToggle();
@@ -138,7 +140,7 @@ const initFancyboxAndCarousel = () => {
       // checkout();
       if(cart.length>0){
         
-        if(totalPrice>=3000){
+        if(totalPrice>=minOrderValue){
           signUpStatusToggle();
           cartStatusToggle();
           

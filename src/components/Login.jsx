@@ -143,7 +143,7 @@ function Login() {
         
       } catch (error) {
         // console.log("Error verifying OTP:", error);
-        setEmailError(error.response?.data?.message || "Something went wrong");
+        setEmailError(error.response?.data?.message || "Something went wrong ,Try again");
         setVerifyButtonContent("verify");
       }
     }

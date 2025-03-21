@@ -5,19 +5,21 @@ import myorder from "../store/myorder.js";
 import { HiDownload } from "react-icons/hi";
 import userLoginStatus from "../store/userLoginStatus.js";
 import useOrderStore from "../store/useOrderStore.js";
+import orderStatus from "../store/orderStatus.js";
+import { BsBagX } from "react-icons/bs";
 
 import axios from "axios";
 function Myorders() {
   const [downloadState, setDownloadState] = useState({});
-  // const [myorders, setMyorders] = useState([]);
   const { orders, loading } = useOrderStore();
-
+  const { orderedStatus } = orderStatus();
   const { toggleProfileStatus } = profileToggle();
   const { toggleMyorderStatus } = myorder();
 
   useEffect(() => {
     console.log(loading);
-  });
+    
+  },[orderedStatus]);
 
   function handleDownload(id, email) {
     setDownloadState((prev) => ({ ...prev, [id]: true }));
@@ -52,7 +54,7 @@ function Myorders() {
         >
           <svg
             aria-hidden="true"
-            class="inline w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-400"
+            className="inline w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-400"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +68,7 @@ function Myorders() {
               fill="currentFill"
             />
           </svg>
-          <span class="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       ) : (
         ""
@@ -74,17 +76,27 @@ function Myorders() {
 
       <div className="flex justify-between mb-2">
         <button
+        className="font-bold text-[20px]"
           onClick={() => {
             toggleMyorderStatus(false);
             toggleProfileStatus(false);
           }}
         >
-          <GrLinkPrevious />
+          <GrLinkPrevious className="text-[20px] font-bold"/>
         </button>
-        <h1 className="text-[20px] mb-5">My Order</h1>
+        <h1 className="text-[20px] mb-5 font-bold text-[20px]">My Order</h1>
       </div>
 
-      {orders.map((order, index) => {
+      {
+      (orders.length==0)?
+      <div className="absolute block left-[50%] top-[50%] transform -translate-x-[50%] -translate-y-[50%] p-3">
+            
+            <BsBagX className="font-bold w-full mb-3 text-[70px] text-red-700"/>
+            <h3 className="font-bold text-[20px] text-center">No Orders yet</h3>
+            <button onClick={()=>toggleMyorderStatus}>Go to Purchase Page</button>
+      </div>:
+      
+      orders.map((order, index) => {
         return (
           <div
             className="order border-gray-30 p-4 mt-[20px] shadow-md"
@@ -121,9 +133,9 @@ function Myorders() {
                 </span>
               </h2>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-[4px] mb-4 dark:bg-gray-700">
+            <div className="w-full bg-gray-200 rounded-full h-[4px] mb-4 dark:bg-gray-700">
               <div
-                class="bg-green-600 h-[4px] mt-3 rounded-full dark:bg-green-500"
+                className="bg-green-600 h-[4px] mt-3 rounded-full dark:bg-green-500"
                 style={{
                   width:
                     order.status == "new"
@@ -187,7 +199,7 @@ function Myorders() {
             )}
 
             <div className="flex border-b-1 justify-between mt-2">
-              <div className="to-address">
+              <div className="to-address mx-w-50">
                 <h2>
                   <span>Address :</span>
                 </h2>
@@ -226,7 +238,7 @@ function Myorders() {
                   <div role="status">
                     <svg
                       aria-hidden="true"
-                      class="inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-400"
+                      className="inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-400"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -240,14 +252,14 @@ function Myorders() {
                         fill="currentFill"
                       />
                     </svg>
-                    <span class="sr-only">Loading...</span>
+                    <span className="sr-only">Loading...</span>
                   </div>
                 ) : (
                   <>
                     <HiDownload className="text-[22px] inline" /> Download
                     invoice
                   </>
-                )}{" "}
+                )}{""}
               </button>
             )}
           </div>

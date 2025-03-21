@@ -8,12 +8,17 @@ import cartStore from "../store/cartStore";
 import userLoginStatus from "../store/userLoginStatus";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import orderStatus from "../store/orderStatus";
 
 
-const MySwal = withReactContent(Swal)
+
+
+const MySwal = withReactContent(Swal);
 
 function SignUp() {
   const { loginUserEmail } = userLoginStatus();
+
+  const { toggleOrderStatus } = orderStatus();
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
   const { cart,clearCart } = cartStore();
@@ -32,8 +37,11 @@ function SignUp() {
   } = useForm();
 
   useEffect(() => {
-    getUserAddress();
+    if (loginUserEmail) {
+      getUserAddress();
+    }
   }, []);
+
 
   useEffect(() => {
     if (userAddress) {
@@ -46,8 +54,12 @@ function SignUp() {
     }
   }, [userAddress, setValue]);
 
-  const getUserAddress = async () => {
-    
+const getUserAddress = async () => {
+    if (!loginUserEmail) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -55,6 +67,7 @@ function SignUp() {
         "https://admin.vmpscrackers.com/api/getuser",
         { email: loginUserEmail }
       );
+      console.log(response); // Log the response for debugging
       if (response.data && response.data.data) {
         setUserAddress(response.data.data);
         setIsEditing(false);
@@ -68,6 +81,7 @@ function SignUp() {
     } finally {
       setLoading(false);
     }
+
   };
 
   const onSubmit = async (data) => {
@@ -75,26 +89,25 @@ function SignUp() {
       console.log(data);
       
     await axios
-      .post("https://myhitech.digitalmantraaz.com/api/place-order", {
+      .post("https://admin.vmpscrackers.com/api/place-order", {
         cart,
-        email: loginUserEmail,
+        "email": loginUserEmail,
         data,
       })
       .then((response) => {
         if(response.data.status=="success"){
           signUpStatusToggle();
           setOrderPlaced(true);
+          toggleOrderStatus();
+
           clearCart();
           Swal.fire({
             title: "Order Placed Successfully",
-            width: 600,
+            text: "Thanks for ordering with us 😊",
             icon: "success",
-            padding: "2em",
-            color: "green",
-            background: "#fff url(/images/trees.png)",
+            background: "#e5ffe5",
             backdrop: `
-              rgba(0, 157, 57, 0.4)
-              url("/images/nyan-cat.gif")
+              #e5ffe5
               left top
               no-repeat
             `
@@ -135,7 +148,7 @@ function SignUp() {
         <div id="storeaddress" className="bg-red-50 p-2">
           <div className="relative">
             <div className="p-3 bg-white"  onClick={()=>{isChecked?setIsChecked(false):setIsChecked(true)}}>
-              <input id="remember" type="checkbox" {...register("checkedAddress", { required: "* Please select Shipping Address" })} checked={isChecked} onChange={handleCheckboxChange} class="w-6 h-6 border border-gray-300 rounded-sm bg-green-50 focus:ring-3 focus:ring-green-300 float-end" />
+              <input id="remember" type="checkbox" {...register("checkedAddress", { required: "* Please select Shipping Address" })} checked={isChecked} onChange={handleCheckboxChange} className="w-6 h-6 border border-gray-300 rounded-sm bg-green-50 focus:ring-3 focus:ring-green-300 float-end" />
               
                 <p className="font-bold text-[18px]">To ,</p>
                 <br />
