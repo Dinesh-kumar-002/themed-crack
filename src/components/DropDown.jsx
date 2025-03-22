@@ -7,10 +7,12 @@ import userLoginStatus from "../store/userLoginStatus";
 import loginOffcanvas from "../store/loginOffcanvas";
 import cartToggle from "../store/cartToggle";
 import address from "../store/address";
+import settingOffcanvas from "../store/settingOffcanvas";
 
 
 const DropDown = () => {
   const { cartStatusToggle, cartStatus } = cartToggle();
+  const { settingsOffcanvasStatus, toggleSettingsOffcanvas } = settingOffcanvas();
   const { loginOffcanvasStatusToggle, loginOffcanvasStatus } = loginOffcanvas();
   const { orderStatus, toggleMyorderStatus } = myorder();
   const { addressStatus, toggleAddressStatus } = address();
@@ -19,11 +21,13 @@ const DropDown = () => {
 
   const handleAddressClick = () => {
     if (loginStatus) {
-
+      if(settingsOffcanvasStatus){
+        toggleSettingsOffcanvas();
+      }
       if (!addressStatus) {
         cartStatus && cartStatusToggle();
         console.log(profileStatus);
-
+        
         toggleMyorderStatus(false);
         // Batch state updates together
         toggleAddressStatus(true);
@@ -31,16 +35,24 @@ const DropDown = () => {
         // toggleProfile(false);
       }
     } else {
-      cartStatus && cartStatusToggle();
+      if(settingsOffcanvasStatus){
+        toggleSettingsOffcanvas();
+      }
 
+      cartStatus && cartStatusToggle();
+      
       if (!loginOffcanvasStatus) {
         loginOffcanvasStatusToggle();
       }
     }
   };
-
+  
   const handleOrderClick = () => {
     if (loginStatus) {
+      if(settingsOffcanvasStatus){
+        toggleSettingsOffcanvas();
+      }
+      
       if (!orderStatus) {
           cartStatus && cartStatusToggle();
           toggleMyorderStatus(true);
@@ -49,6 +61,9 @@ const DropDown = () => {
           // toggleProfile(false);
       }
     } else {
+      if(settingsOffcanvasStatus){
+        toggleSettingsOffcanvas();
+      }
       cartStatus && cartStatusToggle();
       loginOffcanvasStatusToggle();
     }

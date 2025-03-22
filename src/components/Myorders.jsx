@@ -4,28 +4,57 @@ import profileToggle from "../store/profileToggle.js";
 import myorder from "../store/myorder.js";
 import { HiDownload } from "react-icons/hi";
 import userLoginStatus from "../store/userLoginStatus.js";
-import useOrderStore from "../store/useOrderStore.js";
+// import useOrderStore from "../store/useOrderStore.js";
 import orderStatus from "../store/orderStatus.js";
 import { BsBagX } from "react-icons/bs";
 
 import axios from "axios";
 function Myorders() {
   const [downloadState, setDownloadState] = useState({});
-  const { orders, loading } = useOrderStore();
+  const [myorders, setMyorders] = useState([]); 
+  // const { orders, loading } = useOrderStore();
+  const [orderFetchloading,setOrderFetchLoading] =useState(true);
   const { orderedStatus } = orderStatus();
+  const { loginUserEmail } = userLoginStatus();
   const { toggleProfileStatus } = profileToggle();
   const { toggleMyorderStatus } = myorder();
+  const [shippingSettings,setShippingSettings]= useState();
 
   useEffect(() => {
-    console.log(loading);
+    fetchMyOrders();
+    handleShippingSettings();
+    setOrderFetchLoading(false);
+  },[]);
+
+  const handleShippingSettings =async ()=>{
+    try {
+        const response = await axios.get('https://admin.vmpscrackers.com/api/shipping');
+        setShippingSettings(response.data.ship);
+  
+    } 
+    catch (error) {
+      
+    }
     
-  },[orderedStatus]);
+  }
+
+
+  const fetchMyOrders = async () => {
+    try {
+        const response = await axios.post('https://admin.vmpscrackers.com/api/myorder', { "email": loginUserEmail },{ withCredentials: false });
+        setMyorders(response.data.orders);
+
+    } 
+    catch (error) {
+      
+    }
+}
 
   function handleDownload(id, email) {
     setDownloadState((prev) => ({ ...prev, [id]: true }));
 
     axios
-      .get(`http://myhitech.digitalmantraaz.com/api/order/pdf/${id}/${email}`, {
+      .get(`https://admin.vmpscrackers.com/api/order/pdf/${id}/${email}`, {
         responseType: "blob",
       })
       .then(function (response) {
@@ -47,7 +76,7 @@ function Myorders() {
 
   return (
     <div className="relative h-full w-full">
-      {loading ? (
+      {orderFetchloading ? (
         <div
           role="status"
           className="absolute top-50 left-50 transform -translate-x-1/2 -translate-y-1/2"
@@ -74,7 +103,7 @@ function Myorders() {
         ""
       )}
 
-      <div className="flex justify-between mb-2">
+      <div className="flex justify-between mb-2 ">
         <button
         className="font-bold text-[20px]"
           onClick={() => {
@@ -86,20 +115,19 @@ function Myorders() {
         </button>
         <h1 className="text-[20px] mb-5 font-bold text-[20px]">My Order</h1>
       </div>
-
-      {
-      (orders.length==0)?
-      <div className="absolute block left-[50%] top-[50%] transform -translate-x-[50%] -translate-y-[50%] p-3">
+<div className="pb-[100px]">
+{
+      (myorders.length==0)?
+      <div className="absolute block left-[50%] top-[50%] transform -translate-x-[50%] -translate-y-[50%] p-3 ">
             
             <BsBagX className="font-bold w-full mb-3 text-[70px] text-red-700"/>
             <h3 className="font-bold text-[20px] text-center">No Orders yet</h3>
-            <button onClick={()=>toggleMyorderStatus}>Go to Purchase Page</button>
       </div>:
       
-      orders.map((order, index) => {
+      myorders.map((order, index) => {
         return (
           <div
-            className="order border-gray-30 p-4 mt-[20px] shadow-md"
+            className="order border-gray-30 p-4 mt-[20px] shadow-md "
             key={index}
             style={{
               background:
@@ -199,7 +227,7 @@ function Myorders() {
             )}
 
             <div className="flex border-b-1 justify-between mt-2">
-              <div className="to-address mx-w-50">
+              <div className="to-address" style={{maxWidth:"45%",paddingRight:"10px"}}>
                 <h2>
                   <span>Address :</span>
                 </h2>
@@ -212,14 +240,14 @@ function Myorders() {
                   Sub Total : ₹ {order.sub_total} /-
                 </span>
                 <span className="block text-end">
-                  Packing Charges : ₹ 50 /-
+                  Packing Charge : ₹ {Math.floor(shippingSettings.price)} /-
                 </span>
                 {/* <span className="block">GST (18%): ₹ 1200 /-</span> */}
               </div>
             </div>
             <div className="h3 border-b-1 my-2 flex justify-between">
               <h3>{order.quantity} Items</h3>
-              <h3>Total {order.total_amount + 50}</h3>
+              <h3>Total {order.total_amount + Math.floor(shippingSettings.price)}</h3>
             </div>
             {order.status == "cancel" ? (
               <button
@@ -265,6 +293,9 @@ function Myorders() {
           </div>
         );
       })}
+</div>
+
+     
     </div>
   );
 }

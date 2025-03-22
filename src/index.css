@@ -22,10 +22,9 @@ body{
     height: 1px;
     background-color: #000000;
     position: absolute;
-    top: 50%;
+    top: 47%;
     left: 0;
     transform: translateY(-50%);
-    rotate: -10deg;
 }
 .individual-price{
         font-weight: 600;

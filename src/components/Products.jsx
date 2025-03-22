@@ -23,7 +23,7 @@ import '@fancyapps/ui/dist/fancybox/fancybox.css';
 import '@fancyapps/ui/dist/carousel/carousel.thumbs.css';
 import { Autoplay } from "@fancyapps/ui/dist/carousel/carousel.autoplay.esm.js";
 
-function Products({ rangeRadio, selectedValues }) {
+function Products({ rangeRadio, selectedValues ,settingData}) {
   const { cartStatus,cartStatusToggle } = cartToggle();
    const [cartItems, setCartItems] = useState([]);
   const {categories, fetchCategories} = categoryStore();
@@ -219,7 +219,7 @@ useEffect(() => {
     };
   }, [view]);
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen pb-[55px]">
       <FilterBox
         setValue={handleSetSearchValue}
         selectCategory={handleSetCategory}
@@ -227,6 +227,7 @@ useEffect(() => {
         setView={setView}
         category={category}
         tabView={view}
+        settingData={settingData}
       />
       <div>
       {bannerData.length > 0 && (
@@ -250,14 +251,12 @@ useEffect(() => {
       return (
         <div key={category.id} className="px-3">
           
-          <h2 className="my-5 py-2 ps-5  bg-yellow-300"><b>{category.title}</b></h2>
+          <h2 className="my-5 py-2 ps-5  bg-slate-300"><b>{category.title}</b></h2>
           <Grid
             className={view === "grid" ? "grid-view" : "list-view"}
             columns={view === "grid"
               ? { initial: "2", sm: "3", md: "4", lg: "6", xl: "6" }
-              // grid grid-cols-1 gap-4
               : { initial: "1", sm: "1", md: "2", lg: "3" }}
-              // grid grid-cols-1 gap-4
             gap="3"
           >
             {categoryProducts.map((product) => {
@@ -265,7 +264,7 @@ useEffect(() => {
               const quantity = cartItem ? cartItem.quantity : 0;
               const result = product.photo?.split(",") || [];
               return (
-                <div key={product.id} className="product-card p-0 bg-yellow-100 shadow-black" style={{boxShadow:"black 5px 5px 12px -10px"}}>
+                <div key={product.id} className="product-card p-0 bg-red-50 shadow-black" style={{boxShadow:"black 5px 5px 8px -10px"}}>
                 <div ref={(el) => (carouselRefs.current[product.id] = el)} className="f-carousel relative product-slide">
                         {result.map((item, index) => (
                           <div key={index} className="f-carousel__slide" data-fancybox={`gallery-${product.id}`} data-src={`https://admin.vmpscrackers.com/${item}`}>
@@ -343,6 +342,8 @@ useEffect(() => {
              </div>
             <button className="focus:outline-none bg-green-700 font-[19px] p-3 px-5 me-2 font-bold text-white w-full" onClick={()=>cartStatusToggle()}> View Cart</button>
             </div>
+
+            <p className="text-center font-[bold] text-[20px] my-4">No More Products 🙄</p>
     </div>
     
   );

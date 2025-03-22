@@ -16,10 +16,10 @@ import '@fancyapps/ui/dist/fancybox/fancybox.css';
 import '@fancyapps/ui/dist/carousel/carousel.thumbs.css';
 import { Autoplay } from "@fancyapps/ui/dist/carousel/carousel.autoplay.esm.js";
 import settings from "../store/settings";
+// import settingOffcanvas from "../store/settingOffcanvas";
 
-function Cart() {
+function Cart({settingData}) {
   const { signUpStatus,signUpStatusToggle } = signUpToggle();
-  const {minOrderValue} = settings();
   const {loginOffcanvasStatus,loginOffcanvasStatusToggle}=loginOffcanvas();
   const { categories, fetchCategories } = categoryStore();
   const { cartStatus, cartStatusToggle } = cartToggle();
@@ -140,14 +140,14 @@ const initFancyboxAndCarousel = () => {
       // checkout();
       if(cart.length>0){
         
-        if(totalPrice>=minOrderValue){
+        if(totalPrice>=settingData.min_order){
           signUpStatusToggle();
           cartStatusToggle();
           
         }
         else{
 
-          toast.warning(`Minimum order ₹ 3000 😥`,{position: "bottom-center",
+          toast.warning(`Minimum order ₹ ${settingData.min_order} 😥`,{position: "bottom-center",
                                     autoClose: 1000});
         }
         
@@ -167,7 +167,7 @@ const initFancyboxAndCarousel = () => {
     }
   }
   return (
-    <div className="fixed right-0 w-100 h-full bg-yellow-50 z-1 shadow-lg" style={{paddingBottom:"100px",display:cartStatus?"block":"none",boxShadow: "black -5px 5px 45px -15px"}}>
+    <div className="fixed right-0 w-95 h-full bg-red-50 z-1 shadow-lg pb-[100px] overflow-y-scroll" style={{display:cartStatus?"block":"none",boxShadow: "black -5px 5px 45px -15px"}}>
 
       <div className="flex justify-between py-5 px-5" style={{width:"100%"}}>
         <button className=" cursor-pointer text-black text-[20px]" onClick={()=>{cartStatusToggle()}}><GrLinkPrevious/></button>
@@ -175,7 +175,7 @@ const initFancyboxAndCarousel = () => {
       </div>
       <div style={{position:"sticky",top:"0px",overflowY:"scroll",height:"80vh",paddingBottom:'50px'}} className="px-2 pt-0">
       {(cartItems.length === 0) && 
-      <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",display:"flex",flexDirection:"column",alignItems:"center"}}>
+      <div className="pb-[100px]" style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",display:"flex",flexDirection:"column",alignItems:"center"}}>
       
       <BsFillCartXFill className="mb-4" size="70" />
       <p className="text-center"><b>Your Cart is empty</b></p>
@@ -255,14 +255,17 @@ const initFancyboxAndCarousel = () => {
           );
         })}
         </div>
-        <div className="fixed bottom-0 w-100">
-              <p className="text-center bg-white text-black py-1">You saved <span className="text-[13px] text-red-700">₹{totalPriceDiscount}/-</span></p>
-              <div className="flex justify-between">
-              <button className="bg-green-700 text-white font-bold w-50 border-r-2 text-[18px] p-2" onClick={handlePlaceOrder}>Place order</button>
-              <p className="bg-red-800 text-white font-bold w-50 text-center p-2" style={{lineHeight:"35px"}}>Total <span>₹{totalPrice}/-</span></p>
-
-          </div>
-        </div>
+        {
+          (cartItems.length === 0)?<></>:
+            <div className="fixed bottom-0 w-100">
+                  <p className="text-center bg-white text-black py-1">You saved <span className="text-[13px] text-red-700">₹{totalPriceDiscount}/-</span></p>
+                  <div className="flex justify-between">
+                  <button className="bg-green-700 text-white font-bold w-50 border-r-2 text-[18px] p-2" onClick={handlePlaceOrder}>Place order</button>
+                  <p className="bg-red-800 text-white font-bold w-50 text-center p-2" style={{lineHeight:"35px"}}>Total <span>₹{totalPrice}/-</span></p>
+    
+              </div>
+            </div>
+          }
     </div>
   );
 }

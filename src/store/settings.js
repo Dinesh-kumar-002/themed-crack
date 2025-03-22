@@ -1,38 +1,19 @@
 import { create } from "zustand";
-import axios from 'axios';
 
-const settings = create((set) => ({
-  minOrderValue: null,
-  email: null,
-  phone: null,
-  address: null,
-  photo: null,
-  logo: null,
-  shortDes: null,
-  description: null,
-
+const settings = create((set, get) => ({
+  settingData: [],
   fetchData: async () => {
     try {
-      const response = await axios.get('https://admin.vmpscrackers.com/api/setting');
+      const res = await fetch('https://admin.vmpscrackers.com/api/setting'); // Adjust API endpoint
+      const data = await res.json();
+      set({ settingData: data.setting[0] });
+      console.log(data.setting[0]);
       
-      // Using a single set call to update the state
-      set({
-        minOrderValue: response.data.setting.min_order,
-        email: response.data.setting.email,
-        phone: response.data.setting.phone,
-        address: response.data.setting.address,
-        photo: response.data.setting.photo,
-        logo: response.data.setting.logo,
-        shortDes: response.data.setting.short_des,
-        description: response.data.setting.description,
-      });
-
-      console.log('Data fetched successfully');
-
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching products:", error);
     }
   },
+ 
 }));
 
 export default settings;
